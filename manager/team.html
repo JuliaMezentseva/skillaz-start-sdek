@@ -184,8 +184,12 @@ function Page() {
       return next;
     });
   }
+  // Открываем экран плана всем, у кого план вообще назначен (есть planId).
+  // Раньше здесь был список id вручную — при смене демо-данных он молча
+  // отставал, и у сотрудника с планом кнопка показывала заглушку.
   function openAction(item) {
-    if (item.employeeId === "irina" || item.employeeId === "artem" || item.employeeId === "pavel" || item.employeeId === "natalia") {
+    const member = D.team.find((m) => m.id === item.employeeId);
+    if (member && member.planId) {
       const tabParam = item.type === "goal" ? "&tab=max" : "";
       window.location.href = "plan.html?employee=" + item.employeeId + tabParam; return;
     }

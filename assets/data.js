@@ -841,6 +841,20 @@ window.SITE_DATA = {
 
   team: [
     {
+      // Первый в списке: с него начинается демонстрация. Цели ещё не созданы —
+      // здесь показывается сценарий постановки целей (plans.newhire), каталог
+      // и ИИ-помощник в форме создания цели.
+      id: "dmitry", name: "Дмитрий Лазарев", position: "Менеджер по привлечению клиентов",
+      department: "Департамент коммерции · Екатеринбург",
+      planKind: "Адаптация", planTitle: "Адаптация: менеджер по привлечению клиентов",
+      dateStart: "10.03.26", dateEnd: "08.06.26", daysLeftLabel: "ещё 85 дн.",
+      progressPct: 0, progressBasis: "по целям", status: "not_started",
+      planId: "newhire",
+      action: { type: "goal", label: "Создать цели", due: "17 мар" },
+      helper: "Ольга Тимофеева",
+      risks: [],
+    },
+    {
       // Главный герой демо — её план открывается в роли "Сотрудник" (plans.onboarding).
       id: "irina", name: "Ирина Ковалёва", position: "Менеджер по привлечению клиентов",
       department: "Департамент коммерции · Москва",
@@ -878,19 +892,6 @@ window.SITE_DATA = {
       planId: "finalReview",
       action: { type: "review", label: "Провести итоговую проверку", due: "10 мар" },
       helper: "Сергей Панин",
-      risks: [],
-    },
-    {
-      // Цели ещё не созданы — с него показывается сценарий постановки целей
-      // (plans.newhire) и ИИ-помощник в форме создания цели.
-      id: "dmitry", name: "Дмитрий Лазарев", position: "Менеджер по привлечению клиентов",
-      department: "Департамент коммерции · Екатеринбург",
-      planKind: "Адаптация", planTitle: "Адаптация: менеджер по привлечению клиентов",
-      dateStart: "10.03.26", dateEnd: "08.06.26", daysLeftLabel: "ещё 85 дн.",
-      progressPct: 0, progressBasis: "по целям", status: "not_started",
-      planId: "newhire",
-      action: { type: "goal", label: "Создать цели", due: "17 мар" },
-      helper: "Ольга Тимофеева",
       risks: [],
     },
     {
@@ -952,7 +953,7 @@ window.SITE_DATA = {
     // Подпись этапа — это срок фазы (см. stages в plans.onboarding), а не статус доступа:
     // заблокированный этап теперь можно раскрыть на просмотр, поэтому «Этап пока недоступен»
     // там был бы неправдой. У текущего этапа показываем конкретную дату этого плана.
-    if (i === 0) s.dueLabel = "Пройдите до 07 янв";
+    if (i === 0) s.dueLabel = "Пройдите до 16 мар";
     s.items = s.items.filter(it => it.kind !== "checkpoint").map((it, j) => {
       it.id = "n" + (i + 1) + "e" + (j + 1);
       it.done = false;
@@ -964,21 +965,21 @@ window.SITE_DATA = {
 
   window.SITE_DATA.plans.newhire = {
     id: "newhire",
-    title: "Адаптация для новичка: менеджер по продажам",
+    title: "Адаптация: менеджер по привлечению клиентов",
     type: "Адаптация",
     status: "in_progress",
     statusLabel: "В процессе",
-    dateStart: "01.01.26",
-    dateEnd: "25.01.26",
+    dateStart: "10.03.26",
+    dateEnd: "08.06.26",
     hasGoals: true,
     goalsPublished: false,
     employeeStarted: false,
-    goalsDeadlineLabel: "07 янв",
+    goalsDeadlineLabel: "17 мар",
     stages: stages,
     goals: [],
     checkpoints: {},
     faq: [
-      { q: "Когда сотрудник увидит цели?", a: "Сразу после публикации — до этого он видит только чек-лист по этапам плана." },
+      { q: "Когда сотрудник увидит цели?", a: "Сразу после публикации — до этого он видит только маршрут по этапам плана." },
       { q: "Можно ли изменить цель после публикации?", a: "Да, пока сотрудник не приступил к работе над планом. После старта работы правки будут недоступны." },
     ],
   };
