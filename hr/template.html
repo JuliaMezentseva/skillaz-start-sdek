@@ -489,7 +489,7 @@ function CatalogGoalRow({ goal, onClick }) {
   );
 }
 
-// ---------------- Проверка выполнения шага — идентично StepAssessmentPicker из manager/plan.html:
+// ---------------- Проверка результата — идентично StepAssessmentPicker из manager/plan.html:
 // HR может привязать готовый оценочный лист из общего справочника D.assessmentTemplates либо
 // оставить шаг без него, тогда итог выставляется на усмотрение проверяющего. ----------------
 function StepAssessmentPicker({ templateId, setTemplateId }) {
@@ -507,7 +507,7 @@ function StepAssessmentPicker({ templateId, setTemplateId }) {
         <div style={{ paddingTop: 1 }}><Checkbox checked={checked} onChange={toggle} /></div>
         <span className="sk-label-4">Добавить оценочный лист</span>
       </div>
-      <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)", marginLeft: 32 }}>Готовые критерии помогут оценить выполнение шага</span>
+      <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)", marginLeft: 32 }}>Готовые критерии помогут оценить результат</span>
       <div style={{ marginLeft: 32, marginTop: 8 }}>
         {checked ? (
           <React.Fragment>
@@ -517,7 +517,7 @@ function StepAssessmentPicker({ templateId, setTemplateId }) {
         ) : (
           <div style={{ padding: "12px 14px", background: "var(--sk-surface-secondary)", borderRadius: "var(--sk-radius-2)" }}>
             <span className="sk-label-3-regular">
-              Без оценочного листа итог выставляется на усмотрение проверяющего: «Шаг выполнен», «Не выполнен» или «Требует доработки».
+              Без оценочного листа итог выставляется на усмотрение проверяющего: «Результат достигнут», «Не выполнен» или «Требует доработки».
             </span>
           </div>
         )}
@@ -603,7 +603,7 @@ function SubgoalFormModal({ initial, onClose, onCreate }) {
   const set = (k) => (v) => setForm((f) => ({ ...f, [k]: v }));
   const canCreate = form.title.trim().length > 0;
   return (
-    <Modal open title="Шаг для выполнения цели" onClose={onClose} size="m" maxHeight="calc(100vh - 64px)"
+    <Modal open title="Промежуточный результат" onClose={onClose} size="m" maxHeight="calc(100vh - 64px)"
       secondary={<Button mode="secondary" onClick={onClose}>Отменить</Button>}
       primary={<Button disabled={!canCreate} onClick={() => onCreate(form)}>{initial ? "Сохранить" : "Добавить"}</Button>}>
       <div className="sk-col sk-gap-4">
@@ -623,7 +623,7 @@ function SubgoalFormModal({ initial, onClose, onCreate }) {
           onRemove={(id) => set("materials")(form.materials.filter((m) => m.id !== id))} />
         <Divider />
         <div className="sk-col sk-gap-3">
-          <span className="sk-label-3" style={{ color: "var(--sk-text-primary)" }}>Проверка выполнения шага</span>
+          <span className="sk-label-3" style={{ color: "var(--sk-text-primary)" }}>Проверка результата</span>
           <StepAssessmentPicker templateId={form.templateId} setTemplateId={set("templateId")} />
         </div>
       </div>
@@ -657,9 +657,9 @@ function TemplateGoalCreateDrawer({ draft, setDraft, onClose, onCreate, onAddSub
           onChange={(e) => setDraft((d) => ({ ...d, dueDays: Math.max(1, Number(e.target.value) || 1) }))} />
 
         <div className="sk-col sk-gap-2">
-          <div className="sk-label-3">Шаги для достижения{draft.subgoals.length ? " " + draft.subgoals.length : ""}</div>
+          <div className="sk-label-3">Промежуточные результаты{draft.subgoals.length ? " " + draft.subgoals.length : ""}</div>
           <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>
-            Разбейте цель на подцели — конкретные шаги, которые помогут сотруднику её достичь. Можно добавить сейчас или позже, после создания цели.
+            Разбейте цель на промежуточные результаты — то, что должно появиться по дороге к ней. Можно добавить сейчас или позже, после создания цели.
           </div>
           {draft.subgoals.map((sg, i) => (
             <div key={i} className="sk-row sk-gap-2" style={{
@@ -747,7 +747,7 @@ function TemplateGoalDrawer({ goal, onClose, onChange, onAddSubgoal, onOpenSubgo
           onChange={(e) => onChange({ dueDays: Math.max(1, Number(e.target.value) || 1) })} />
 
         <div className="sk-col sk-gap-2">
-          <div className="sk-label-3">Шаги для выполнения{goal.subgoals.length ? " " + goal.subgoals.length : ""}</div>
+          <div className="sk-label-3">Промежуточные результаты{goal.subgoals.length ? " " + goal.subgoals.length : ""}</div>
           {goal.subgoals.length ? (
             goal.subgoals.map((sg, i) => (
               <div key={sg.id} className="sk-row sk-gap-2" style={{ alignItems: "center" }}
@@ -762,7 +762,7 @@ function TemplateGoalDrawer({ goal, onClose, onChange, onAddSubgoal, onOpenSubgo
               </div>
             ))
           ) : (
-            <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Шаги ещё не добавлены</span>
+            <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Промежуточные результаты ещё не добавлены</span>
           )}
           <button className="sk-link-btn sk-label-3-regular" onClick={onAddSubgoal} style={{ alignSelf: "flex-start" }}>+ Добавить</button>
         </div>
@@ -804,7 +804,7 @@ function TemplateGoalRow({ goal, onOpen, onDelete, onOpenSubgoal, onReorderSubgo
           ))}
         </div>
       ) : (
-        <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Шаги ещё не добавлены</span>
+        <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Промежуточные результаты ещё не добавлены</span>
       )}
     </div>
   );
@@ -1001,7 +1001,7 @@ function GoalsSettingsCard({ template, enabled, owner, deadlineDays, reviewRequi
           <div className="sk-row" style={{ justifyContent: "space-between", padding: "16px 24px" }}>
             <div className="sk-row sk-gap-1">
               <span className="sk-label-3">Включить план адаптации с целями</span>
-              <Tooltip content={<div style={{ maxWidth: 260, whiteSpace: "normal" }}>В этом плане сотруднику можно поставить цели, шаги к ним и полезные материалы. С этим планом сотрудник не просто проходит чек-лист, а приближается к тому, чтобы перформить в своей роли.</div>}>
+              <Tooltip content={<div style={{ maxWidth: 260, whiteSpace: "normal" }}>В этом плане сотруднику можно поставить цели, промежуточные результаты и полезные материалы. С этим планом сотрудник не просто проходит чек-лист, а приближается к тому, чтобы перформить в своей роли.</div>}>
                 <IconHelpCircle size={16} color="var(--sk-icon-secondary)" />
               </Tooltip>
             </div>

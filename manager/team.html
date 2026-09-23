@@ -28,7 +28,7 @@ const TODAY = D.managerToday; // "2026-03-15"
 const TYPE_META = {
   goal: { label: "Цель", icon: IconTarget, bg: "var(--sk-special-secondary)", fg: "var(--sk-special)" },
   approval: { label: "Согласование", icon: IconEye, bg: "var(--sk-accent-secondary)", fg: "var(--sk-icon-accent)" },
-  subgoal: { label: "Подцель", icon: IconLink2, bg: "var(--sk-accent-secondary)", fg: "var(--sk-icon-accent)" },
+  subgoal: { label: "Результат", icon: IconLink2, bg: "var(--sk-accent-secondary)", fg: "var(--sk-icon-accent)" },
   task: { label: "Задача", icon: IconCheck, bg: "var(--sk-surface-secondary)", fg: "var(--sk-icon-secondary)" },
   checkin: { label: "Контрольная точка", icon: IconFlag, bg: "var(--sk-positive-secondary)", fg: "var(--sk-icon-positive)" },
   review: { label: "Проверка плана", icon: IconFileText, bg: "var(--sk-warning-secondary)", fg: "var(--sk-text-warning-dark)" },
@@ -363,7 +363,7 @@ function Page() {
 }
 
 function pluralType(t) {
-  const map = { goal: "Цели", approval: "Согласования", subgoal: "Подцели", task: "Задачи", checkin: "Контрольные точки", review: "Проверки планов" };
+  const map = { goal: "Цели", approval: "Согласования", subgoal: "Промежуточные результаты", task: "Задачи", checkin: "Контрольные точки", review: "Проверки планов" };
   return map[t] || TYPE_META[t].label;
 }
 

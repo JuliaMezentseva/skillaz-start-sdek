@@ -853,8 +853,8 @@ function aiEmployeePlanIntent(queryRaw) {
     const [goalId, subgoalId] = raw.slice("__openSubgoal:".length).split(":");
     const goal = (plan.goals || []).find((g) => g.id === goalId);
     const sg = goal && goal.subgoals.find((s) => s.id === subgoalId);
-    if (!sg) return { text: "Не нашёл этот шаг.", results: [] };
-    return { text: "Открываю шаг «" + sg.title + "»…", results: [], action: "openSubgoal", actionPayload: { goalId, subgoalId } };
+    if (!sg) return { text: "Не нашёл этот промежуточный результат.", results: [] };
+    return { text: "Открываю промежуточный результат «" + sg.title + "»…", results: [], action: "openSubgoal", actionPayload: { goalId, subgoalId } };
   }
   if (raw.indexOf("__openCheckpoint:") === 0) {
     const cpId = raw.slice("__openCheckpoint:".length);
@@ -865,7 +865,7 @@ function aiEmployeePlanIntent(queryRaw) {
   if (raw.indexOf("__openItem:") === 0) {
     const itemId = raw.slice("__openItem:".length);
     const found = aiFindChecklistItem(plan, itemId);
-    if (!found) return { text: "Не нашёл этот шаг.", results: [] };
+    if (!found) return { text: "Не нашёл этот промежуточный результат.", results: [] };
     return { text: "Открываю «" + found.item.title + "»…", results: [], action: "openItem", actionPayload: itemId };
   }
 
@@ -889,7 +889,7 @@ function aiEmployeePlanIntent(queryRaw) {
   }
 
   if (q.indexOf("работе") !== -1 || q.indexOf("текущ") !== -1) {
-    if (!activeSubgoals.length) return { text: "Сейчас нет шагов, взятых в работу — загляните во вкладку «Цели адаптации» и возьмите очередной шаг.", results: [] };
+    if (!activeSubgoals.length) return { text: "Сейчас нет промежуточных результатов в работе — загляните во вкладку «Цели адаптации» и возьмите очередной.", results: [] };
     return {
       text: "Вот что у вас сейчас в работе:",
       results: activeSubgoals.map((sg) => ({
@@ -1108,7 +1108,7 @@ function aiEmployeeHomeIntent(queryRaw) {
     };
   }
   if (q.indexOf("работе") !== -1 || q.indexOf("текущ") !== -1) {
-    if (!activeSubgoals.length) return { text: "Сейчас нет шагов, взятых в работу — загляните в план адаптации и возьмите очередной шаг.", results: [] };
+    if (!activeSubgoals.length) return { text: "Сейчас нет промежуточных результатов в работе — загляните в план адаптации и возьмите очередной.", results: [] };
     return {
       text: "Вот что у вас сейчас в работе:",
       results: activeSubgoals.map((sg) => ({

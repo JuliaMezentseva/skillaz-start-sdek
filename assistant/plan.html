@@ -54,7 +54,7 @@ const SUBGOAL_ICON = {
 };
 
 const MIN_TAB_NOTE = "Маршрут сотрудника — от первых шагов до погружения в роль. Пункты он отмечает сам, вашего подтверждения не требуется.";
-const MAX_TAB_NOTE = "Персональный план сотрудника на результат в роли. Вы участвуете в проверке подцелей и КТ, где назначены проверяющим.";
+const MAX_TAB_NOTE = "Персональный план сотрудника на результат в роли. Вы участвуете в проверке промежуточных результатов и контрольных точек, где назначены проверяющим.";
 const CP_YELLOW = "var(--yellow-yellow-85)";
 const CP_YELLOW_BG = "var(--yellow-yellow-96)";
 const CP_YELLOW_BORDER = "var(--yellow-yellow-80)";
@@ -108,7 +108,7 @@ function Page() {
   const [toast, setToast] = React.useState(null);
 
   const [goalDrawer, setGoalDrawer] = React.useState(null); // { mode: "new" } | { mode: "edit", goalId }
-  const [newGoalDraft, setNewGoalDraft] = React.useState({ title: "", description: "", dueDate: new Date(2026, 0, 20), subgoals: [] });
+  const [newGoalDraft, setNewGoalDraft] = React.useState({ title: "", description: "", dueDate: new Date(2026, 5, 8), subgoals: [] });
   const [subgoalModal, setSubgoalModal] = React.useState(null); // { context: "draft" } | { context: "goal", goalId }
   const [subgoalDrawer, setSubgoalDrawer] = React.useState(null); // { goalId, subgoalId }
   const [checklistPicker, setChecklistPicker] = React.useState(null); // { goalId, subgoalId }
@@ -167,7 +167,7 @@ function Page() {
       ...g, subgoals: g.subgoals.filter(sg => sg.id !== subgoalId),
     }) }));
     setDeleteSubgoal(null);
-    showToast("Подцель удалена");
+    showToast("Промежуточный результат удалён");
   }
   function toggleChecklistRef(goalId, subgoalId, itemId) {
     setPlan(prev => ({ ...prev, goals: prev.goals.map(g => g.id !== goalId ? g : {
@@ -188,19 +188,19 @@ function Page() {
   // ---------------- Подтверждение / возврат / not_done ----------------
   function confirmSubgoal(goalId, subgoalId) {
     updateSubgoal(goalId, subgoalId, { status: "done" });
-    showToast("Подцель подтверждена");
+    showToast("Результат подтверждён");
     setSubgoalDrawer(null);
   }
   function returnSubgoal(goalId, subgoalId, comment) {
     addComment(goalId, subgoalId, comment);
     updateSubgoal(goalId, subgoalId, { status: "in_progress" });
-    showToast("Подцель возвращена в работу");
+    showToast("Результат возвращён в работу");
     setReturnModal(null);
     setSubgoalDrawer(null);
   }
   function markNotDone(goalId, subgoalId) {
     updateSubgoal(goalId, subgoalId, { status: "not_done" });
-    showToast("Подцель отмечена невыполненной");
+    showToast("Результат отмечен недостигнутым");
     setNotDoneConfirm(null);
     setSubgoalDrawer(null);
   }
@@ -265,9 +265,9 @@ function Page() {
               {plan.goals.length === 0 && (
                 <Card>
                   <div className="sk-col sk-gap-3" style={{ alignItems: "center", textAlign: "center", padding: "24px 16px" }}>
-                    <div className="sk-title-5">Сформируйте цель и шаги для её достижения{plan.goalsDeadlineLabel ? " до " + plan.goalsDeadlineLabel : ""}</div>
+                    <div className="sk-title-5">Сформируйте цель и промежуточные результаты{plan.goalsDeadlineLabel ? " до " + plan.goalsDeadlineLabel : ""}</div>
                     <div className="sk-muted" style={{ maxWidth: 440 }}>Цель — это ожидаемый вами измеримый результат, с которым сотрудник должен окончить план адаптации</div>
-                    <Button onClick={() => { setNewGoalDraft({ title: "", description: "", dueDate: new Date(2026, 0, 20), subgoals: [] }); setGoalDrawer({ mode: "new" }); }}>+ Создать</Button>
+                    <Button onClick={() => { setNewGoalDraft({ title: "", description: "", dueDate: new Date(2026, 5, 8), subgoals: [] }); setGoalDrawer({ mode: "new" }); }}>+ Создать</Button>
                   </div>
                 </Card>
               )}
@@ -277,7 +277,7 @@ function Page() {
                   {!plan.goalsPublished && (
                     <div className="sk-row sk-gap-2" style={{ justifyContent: "flex-end" }}>
                       <Button size="s" mode="secondary" disabled={plan.employeeStarted}
-                        onClick={() => { setNewGoalDraft({ title: "", description: "", dueDate: new Date(2026, 0, 20), subgoals: [] }); setGoalDrawer({ mode: "new" }); }}>+ Создать цель</Button>
+                        onClick={() => { setNewGoalDraft({ title: "", description: "", dueDate: new Date(2026, 5, 8), subgoals: [] }); setGoalDrawer({ mode: "new" }); }}>+ Создать цель</Button>
                       <Button size="s" variant="positive" disabled={!canPublish} onClick={() => setPublishConfirm(true)}>
                         Опубликовать
                       </Button>
@@ -377,7 +377,7 @@ function Page() {
           secondary={<Button mode="secondary" onClick={() => setNotDoneConfirm(null)}>Отменить</Button>}
           primary={<Button variant="negative" onClick={() => markNotDone(notDoneConfirm.goalId, notDoneConfirm.subgoalId)}>Отметить не выполненной</Button>}>
           <div className="sk-col sk-gap-2" style={{ alignItems: "center", textAlign: "center", padding: "8px 0" }}>
-            <div className="sk-label-2">Отметить подцель не выполненной?</div>
+            <div className="sk-label-2">Отметить результат не достигнутым?</div>
             <div className="sk-muted">Это финальное решение руководителя — изменить статус позже будет нельзя.</div>
           </div>
         </Modal>
@@ -388,16 +388,16 @@ function Page() {
           secondary={<Button mode="secondary" onClick={() => setDeleteGoal(null)}>Отменить</Button>}
           primary={<Button variant="negative" onClick={() => removeGoal(deleteGoal)}>Удалить цель</Button>}>
           <div className="sk-col sk-gap-2" style={{ alignItems: "center", textAlign: "center", padding: "8px 0" }}>
-            <div className="sk-label-2">Удалить цель вместе со всеми подцелями?</div>
+            <div className="sk-label-2">Удалить цель вместе со всеми промежуточными результатами?</div>
           </div>
         </Modal>
       )}
       {deleteSubgoal && (
         <Modal open title={null} onClose={() => setDeleteSubgoal(null)} size="s"
           secondary={<Button mode="secondary" onClick={() => setDeleteSubgoal(null)}>Отменить</Button>}
-          primary={<Button variant="negative" onClick={() => removeSubgoal(deleteSubgoal.goalId, deleteSubgoal.subgoalId)}>Удалить подцель</Button>}>
+          primary={<Button variant="negative" onClick={() => removeSubgoal(deleteSubgoal.goalId, deleteSubgoal.subgoalId)}>Удалить результат</Button>}>
           <div className="sk-col sk-gap-2" style={{ alignItems: "center", textAlign: "center", padding: "8px 0" }}>
-            <div className="sk-label-2">Удалить эту подцель?</div>
+            <div className="sk-label-2">Удалить этот промежуточный результат?</div>
           </div>
         </Modal>
       )}
@@ -448,7 +448,7 @@ function ManagerGoalRow({ goal, plan, onOpenGoal, onOpenSubgoal, onDeleteGoal })
       {!isDone && (
         <div className="sk-col sk-gap-2" onClick={(e) => e.stopPropagation()}>
           {goal.subgoals.map(sg => <ManagerSubgoalRow key={sg.id} subgoal={sg} goalDueLabel={goal.dueLabel} onOpen={() => onOpenSubgoal(sg.id)} />)}
-          {!goal.subgoals.length && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Подцели ещё не добавлены</div>}
+          {!goal.subgoals.length && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Промежуточные результаты ещё не добавлены</div>}
         </div>
       )}
     </div>
@@ -499,9 +499,9 @@ function GoalCreateDrawer({ draft, setDraft, onClose, onCreate, onAddSubgoal }) 
           onChange={(date) => setDraft(d => ({ ...d, dueDate: date }))} />
 
         <div className="sk-col sk-gap-2">
-          <div className="sk-label-3">Шаги для достижения{draft.subgoals.length ? " " + draft.subgoals.length : ""}</div>
+          <div className="sk-label-3">Промежуточные результаты{draft.subgoals.length ? " " + draft.subgoals.length : ""}</div>
           <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>
-            Разбейте цель на подцели — конкретные шаги, которые помогут сотруднику её достичь. Можно добавить сейчас или позже, после создания цели.
+            Разбейте цель на промежуточные результаты — то, что должно появиться по дороге к ней. Можно добавить сейчас или позже, после создания цели.
           </div>
           {draft.subgoals.map((sg, i) => (
             <div key={i} className="sk-row sk-gap-3" style={{ justifyContent: "space-between", padding: 10, border: "1px solid var(--sk-stroke)", borderRadius: "var(--sk-radius-2)" }}>
@@ -554,7 +554,7 @@ function GoalDrawer({ goal, plan, editable, onClose, onChange, onAddSubgoal, onO
         )}
 
         <div className="sk-col sk-gap-2">
-          <div className="sk-label-3">Шаги для выполнения {done}/{total}</div>
+          <div className="sk-label-3">Промежуточные результаты {done}/{total}</div>
           {goal.subgoals.map(sg => {
             const cfg = SUBGOAL_ICON[sg.status];
             return (
@@ -589,11 +589,11 @@ function GoalDrawer({ goal, plan, editable, onClose, onChange, onAddSubgoal, onO
 function SubgoalCreateModal({ onClose, onCreate }) {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [dueDate, setDueDate] = React.useState(new Date(2026, 0, 20));
+  const [dueDate, setDueDate] = React.useState(new Date(2026, 5, 8));
   const [reviewer, setReviewer] = React.useState(D.assistantMe.name);
   const canCreate = title.trim().length > 0;
   return (
-    <Modal open title="Шаг для выполнения цели" onClose={onClose} size="m"
+    <Modal open title="Промежуточный результат" onClose={onClose} size="m"
       secondary={<Button mode="secondary" onClick={onClose}>Отменить</Button>}
       primary={<Button disabled={!canCreate} onClick={() => onCreate({ title, description, dueDate, reviewer })}>Добавить</Button>}>
       <div className="sk-col sk-gap-4">
@@ -691,7 +691,7 @@ function SubgoalDrawer({ plan, goal, subgoal, onClose, onChange, onOpenChecklist
 
         <CollapsibleSection title={"Полезные материалы" + (links.length ? " " + links.length : "")}>
           <div className="sk-col sk-gap-2" style={{ padding: 12, background: "var(--sk-accent-secondary)", borderRadius: "var(--sk-radius-3)" }}>
-            {!links.length && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Добавьте вспомогательные материалы для выполнения этого шага</div>}
+            {!links.length && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Добавьте вспомогательные материалы для достижения этого результата</div>}
             {links.map(({ item, stage }) => (
               <div key={item.id} className="sk-row" style={{ justifyContent: "space-between", padding: 10, background: "var(--sk-surface-page)", border: "1px solid var(--sk-stroke)", borderRadius: "var(--sk-radius-2)" }}>
                 <div className="sk-col sk-gap-1">
@@ -733,7 +733,7 @@ function ReturnCommentModal({ onClose, onSubmit }) {
   const [comment, setComment] = React.useState("");
   const canSubmit = comment.trim().length > 0;
   return (
-    <Modal open title="Вернуть подцель в работу" onClose={onClose} size="s"
+    <Modal open title="Вернуть результат в работу" onClose={onClose} size="s"
       secondary={<Button mode="secondary" onClick={onClose}>Отменить</Button>}
       primary={<Button disabled={!canSubmit} onClick={() => onSubmit(comment.trim())}>Вернуть в работу</Button>}>
       <Textarea label="Комментарий" required helper="Обязателен — объясните сотруднику, что нужно доработать"

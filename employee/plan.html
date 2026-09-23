@@ -101,7 +101,7 @@ const CHECKPOINT_STEPS = [
 ];
 
 const MIN_TAB_NOTE = "Ваш маршрут адаптации — от первых шагов до погружения в роль. Отмечайте пункты по мере прохождения.";
-const MAX_TAB_NOTE = "Здесь — ваши рабочие цели по плану. Откройте цель, чтобы увидеть шаги и отслеживать прогресс.";
+const MAX_TAB_NOTE = "Здесь — ваши рабочие цели по плану. Откройте цель, чтобы увидеть промежуточные результаты и отслеживать прогресс.";
 
 function goalProgress(goal) {
   const total = goal.subgoals.length;
@@ -399,7 +399,7 @@ function GoalDrawer({ goal, plan, onClose, onOpenSubgoal, onTakeSubgoal, onToggl
 
 // Короткая общая подсказка про оценочный лист — без имён и без "вы/сотрудник", её читают
 // с одного и того же места и сотрудник, и руководитель.
-const ASSESSMENT_HINT_FALLBACK = "Критерии, по которым оценивают выполнение этого шага. Их отмечает проверяющий после того, как шаг отправлен на подтверждение.";
+const ASSESSMENT_HINT_FALLBACK = "Критерии, по которым оценивают этот промежуточный результат. Их отмечает проверяющий после того, как результат отправлен на подтверждение.";
 function AssessmentHintTooltip({ hint }) {
   return (
     <Tooltip placement="bottom" content={
@@ -426,7 +426,7 @@ function DrawerTabs({ items, active, onChange }) {
   );
 }
 
-const ASSESSMENT_DECISION_LABEL = { done: "Шаг выполнен", returned: "На доработке", not_done: "Шаг не выполнен" };
+const ASSESSMENT_DECISION_LABEL = { done: "Результат достигнут", returned: "На доработке", not_done: "Результат не достигнут" };
 const ASSESSMENT_DECISION_HUE = { done: "positive", returned: "warning", not_done: "negative" };
 
 // Критерии шаблона — только просмотр, ничего не отмечено (сотрудник не проставляет ответы,
@@ -495,7 +495,7 @@ function AssessmentTabContent({ history }) {
           ))}
         </div>
       ) : (
-        <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Пока нет оценок — они появятся здесь после проверки шага.</div>
+        <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Пока нет оценок — они появятся здесь после проверки результата.</div>
       )}
     </div>
   );

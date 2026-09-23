@@ -120,7 +120,7 @@ function MaterialsPicker({ materials, onAdd, onRemove }) {
   );
 }
 
-// ---------------- Проверка выполнения шага — тот же UI, что и в hr/template.html ----------------
+// ---------------- Проверка результата — тот же UI, что и в hr/template.html ----------------
 function StepAssessmentPicker({ templateId, setTemplateId }) {
   const D = window.SITE_DATA;
   const templates = D.assessmentTemplates || [];
@@ -136,14 +136,14 @@ function StepAssessmentPicker({ templateId, setTemplateId }) {
         <div style={{ paddingTop: 1 }}><Checkbox checked={checked} onChange={toggle} /></div>
         <span className="sk-label-4">Добавить оценочный лист</span>
       </div>
-      <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)", marginLeft: 32 }}>Готовые критерии помогут оценить выполнение шага</span>
+      <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)", marginLeft: 32 }}>Готовые критерии помогут оценить результат</span>
       <div style={{ marginLeft: 32, marginTop: 8 }}>
         {checked ? (
           <Select value={templateId} options={templates.map((t) => ({ value: t.id, label: t.title }))} onChange={setTemplateId} />
         ) : (
           <div style={{ padding: "12px 14px", background: "var(--sk-surface-secondary)", borderRadius: "var(--sk-radius-2)" }}>
             <span className="sk-label-3-regular">
-              Без оценочного листа итог выставляется на усмотрение проверяющего: «Шаг выполнен», «Не выполнен» или «Требует доработки».
+              Без оценочного листа итог выставляется на усмотрение проверяющего: «Результат достигнут», «Не выполнен» или «Требует доработки».
             </span>
           </div>
         )}
@@ -164,7 +164,7 @@ function SubgoalFormModal({ initial, onClose, onCreate }) {
   const set = (k) => (v) => setForm((f) => ({ ...f, [k]: v }));
   const canCreate = form.title.trim().length > 0;
   return (
-    <Modal open title="Шаг для выполнения цели" onClose={onClose} size="m" maxHeight="calc(100vh - 64px)"
+    <Modal open title="Промежуточный результат" onClose={onClose} size="m" maxHeight="calc(100vh - 64px)"
       secondary={<Button mode="secondary" onClick={onClose}>Отменить</Button>}
       primary={<Button disabled={!canCreate} onClick={() => onCreate(form)}>{initial ? "Сохранить" : "Добавить"}</Button>}>
       <div className="sk-col sk-gap-4">
@@ -184,7 +184,7 @@ function SubgoalFormModal({ initial, onClose, onCreate }) {
           onRemove={(id) => set("materials")(form.materials.filter((m) => m.id !== id))} />
         <Divider />
         <div className="sk-col sk-gap-3">
-          <span className="sk-label-3" style={{ color: "var(--sk-text-primary)" }}>Проверка выполнения шага</span>
+          <span className="sk-label-3" style={{ color: "var(--sk-text-primary)" }}>Проверка результата</span>
           <StepAssessmentPicker templateId={form.templateId} setTemplateId={set("templateId")} />
         </div>
       </div>
@@ -261,9 +261,9 @@ function GoalCatalogFormDrawer({ initial, onClose, onSave }) {
 
           <Divider />
           <div className="sk-col sk-gap-2">
-            <div className="sk-label-3">Шаги для достижения{form.subgoals.length ? " " + form.subgoals.length : ""}</div>
+            <div className="sk-label-3">Промежуточные результаты{form.subgoals.length ? " " + form.subgoals.length : ""}</div>
             <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>
-              Разбейте цель на подцели — с материалами и проверкой выполнения, если нужно. Можно добавить сейчас или позже.
+              Разбейте цель на промежуточные результаты — с материалами и проверкой, если нужно. Можно добавить сейчас или позже.
             </div>
             {form.subgoals.map((sg, i) => (
               <div key={sg.id} className="sk-row sk-gap-2" style={{
@@ -290,7 +290,7 @@ function GoalCatalogFormDrawer({ initial, onClose, onSave }) {
                 <button className="sk-link-btn" onClick={() => deleteSubgoal(i)}><IconTrash size={15} color="var(--sk-icon-secondary)" /></button>
               </div>
             ))}
-            <button className="sk-link-btn sk-label-3-regular" onClick={() => setSubgoalModal("create")} style={{ alignSelf: "flex-start" }}>+ Добавить шаг</button>
+            <button className="sk-link-btn sk-label-3-regular" onClick={() => setSubgoalModal("create")} style={{ alignSelf: "flex-start" }}>+ Добавить результат</button>
           </div>
         </div>
       </Drawer>
@@ -497,7 +497,7 @@ function GoalCatalogRow({ goal, expanded, onToggle, onEdit, onDuplicate, onArchi
         display: "grid", gridTemplateColumns: GOAL_ROW_GRID, gap: 12, alignItems: "flex-start", padding: "14px 8px",
         background: hover ? "var(--sk-hover-table)" : "transparent",
       }}>
-        <button onClick={(e) => { e.stopPropagation(); onToggle(); }} aria-label="Показать шаги" style={{
+        <button onClick={(e) => { e.stopPropagation(); onToggle(); }} aria-label="Показать промежуточные результаты" style={{
           width: 26, height: 26, marginTop: 3, display: "flex", alignItems: "center", justifyContent: "center", background: "none", border: "none", cursor: "pointer",
           color: "var(--sk-icon-secondary)", transform: expanded ? "rotate(90deg)" : "none", transition: "transform var(--sk-duration) var(--sk-ease)",
         }}><IconChevronRight size={16} /></button>
@@ -540,7 +540,7 @@ function GoalCatalogRow({ goal, expanded, onToggle, onEdit, onDuplicate, onArchi
             </div>
           ) : (
             <div style={{ padding: "8px 0", borderTop: "1px solid var(--sk-stroke)" }}>
-              <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Шаги ещё не добавлены</span>
+              <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Промежуточные результаты ещё не добавлены</span>
             </div>
           )}
         </div>

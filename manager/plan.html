@@ -88,7 +88,7 @@ const STATUS_ICON = {
 };
 
 const MIN_TAB_NOTE = "Маршрут сотрудника — от первых шагов до погружения в роль. Пункты он отмечает сам, вашего подтверждения не требуется.";
-const MAX_TAB_NOTE = "Цели помогают сотруднику выйти на результат в роли после адаптации. Открывайте цель, чтобы задать шаги и следить за прогрессом.";
+const MAX_TAB_NOTE = "Цели помогают сотруднику выйти на результат в роли после адаптации. Открывайте цель, чтобы задать промежуточные результаты и следить за прогрессом.";
 // На финальном ревью тот же баннер меняет текст под текущую задачу руководителя — вместо
 // обычной подсказки про вкладку показывает, что план ждёт решения, и даёт кнопку сразу
 // здесь же, в начале страницы (см. отзыв: раньше кнопка была только в RightPanel, и до неё
@@ -169,7 +169,7 @@ function Page() {
   const [openRisks, setOpenRisks] = React.useState(() => member.risks || []);
 
   const [goalDrawer, setGoalDrawer] = React.useState(null); // { mode: "new" } | { mode: "edit", goalId }
-  const [newGoalDraft, setNewGoalDraft] = React.useState({ title: "", description: "", dueDate: new Date(2026, 0, 20), subgoals: [] });
+  const [newGoalDraft, setNewGoalDraft] = React.useState({ title: "", description: "", dueDate: new Date(2026, 5, 8), subgoals: [] });
   const [draftFromCatalog, setDraftFromCatalog] = React.useState(false); // черновик пришёл из каталога — показать бейдж в дровере
   const [goalMethodModal, setGoalMethodModal] = React.useState(false); // выбор способа создания цели
   const [aiGoalModal, setAiGoalModal] = React.useState(false); // создание цели с AI-помощником
@@ -256,7 +256,7 @@ function Page() {
       ...g, subgoals: g.subgoals.filter(sg => sg.id !== subgoalId),
     }) }));
     setDeleteSubgoal(null);
-    showToast("Подцель удалена");
+    showToast("Промежуточный результат удалён");
   }
   function toggleChecklistRef(goalId, subgoalId, itemId) {
     setPlan(prev => ({ ...prev, goals: prev.goals.map(g => g.id !== goalId ? g : {
@@ -277,19 +277,19 @@ function Page() {
   // ---------------- Подтверждение / возврат / not_done ----------------
   function confirmSubgoal(goalId, subgoalId) {
     updateSubgoal(goalId, subgoalId, { status: "done" });
-    showToast("Подцель подтверждена");
+    showToast("Результат подтверждён");
     setSubgoalDrawer(null);
   }
   function returnSubgoal(goalId, subgoalId, comment) {
     addComment(goalId, subgoalId, comment);
     updateSubgoal(goalId, subgoalId, { status: "in_progress" });
-    showToast("Подцель возвращена в работу");
+    showToast("Результат возвращён в работу");
     setReturnModal(null);
     setSubgoalDrawer(null);
   }
   function markNotDone(goalId, subgoalId) {
     updateSubgoal(goalId, subgoalId, { status: "not_done" });
-    showToast("Подцель отмечена невыполненной");
+    showToast("Результат отмечен недостигнутым");
     setNotDoneConfirm(null);
     setSubgoalDrawer(null);
   }
@@ -304,7 +304,7 @@ function Page() {
         ...sg, status: statusByDecision[decision], assessmentHistory: [...(sg.assessmentHistory || []), historyEntry],
       }),
     }) }));
-    const toastByDecision = { done: "Подцель подтверждена", returned: "Подцель возвращена в работу", not_done: "Подцель отмечена невыполненной" };
+    const toastByDecision = { done: "Результат подтверждён", returned: "Результат возвращён в работу", not_done: "Результат отмечен недостигнутым" };
     showToast(toastByDecision[decision]);
     setSubgoalDrawer(null);
   }
@@ -409,7 +409,7 @@ function Page() {
               {plan.goals.length === 0 && (
                 <Card>
                   <div className="sk-col sk-gap-3" style={{ alignItems: "center", textAlign: "center", padding: "24px 16px" }}>
-                    <div className="sk-title-5">Сформируйте цель и шаги для её достижения{plan.goalsDeadlineLabel ? " до " + plan.goalsDeadlineLabel : ""}</div>
+                    <div className="sk-title-5">Сформируйте цель и промежуточные результаты{plan.goalsDeadlineLabel ? " до " + plan.goalsDeadlineLabel : ""}</div>
                     <div className="sk-muted" style={{ maxWidth: 440 }}>Цель — это ожидаемый вами измеримый результат, с которым сотрудник должен окончить план адаптации</div>
                     <Button onClick={() => setGoalMethodModal(true)}>+ Создать</Button>
                   </div>
@@ -457,7 +457,7 @@ function Page() {
         <GoalMethodModal onClose={() => setGoalMethodModal(false)}
           onManual={() => {
             setGoalMethodModal(false);
-            setNewGoalDraft({ title: "", description: "", dueDate: new Date(2026, 0, 20), subgoals: [] });
+            setNewGoalDraft({ title: "", description: "", dueDate: new Date(2026, 5, 8), subgoals: [] });
             setDraftFromCatalog(false);
             setGoalDrawer({ mode: "new" });
           }}
@@ -576,16 +576,16 @@ function Page() {
           secondary={<Button mode="secondary" onClick={() => setDeleteGoal(null)}>Отменить</Button>}
           primary={<Button variant="negative" onClick={() => removeGoal(deleteGoal)}>Удалить цель</Button>}>
           <div className="sk-col sk-gap-2" style={{ alignItems: "center", textAlign: "center", padding: "8px 0" }}>
-            <div className="sk-label-2">Удалить цель вместе со всеми подцелями?</div>
+            <div className="sk-label-2">Удалить цель вместе со всеми промежуточными результатами?</div>
           </div>
         </Modal>
       )}
       {deleteSubgoal && (
         <Modal open title={null} onClose={() => setDeleteSubgoal(null)} size="s"
           secondary={<Button mode="secondary" onClick={() => setDeleteSubgoal(null)}>Отменить</Button>}
-          primary={<Button variant="negative" onClick={() => removeSubgoal(deleteSubgoal.goalId, deleteSubgoal.subgoalId)}>Удалить подцель</Button>}>
+          primary={<Button variant="negative" onClick={() => removeSubgoal(deleteSubgoal.goalId, deleteSubgoal.subgoalId)}>Удалить результат</Button>}>
           <div className="sk-col sk-gap-2" style={{ alignItems: "center", textAlign: "center", padding: "8px 0" }}>
-            <div className="sk-label-2">Удалить эту подцель?</div>
+            <div className="sk-label-2">Удалить этот промежуточный результат?</div>
           </div>
         </Modal>
       )}
@@ -654,7 +654,7 @@ function ManagerGoalRow({ goal, plan, highlighted, onOpenGoal, onOpenSubgoal, on
       {stepsOpen && (
         <div className="sk-col sk-gap-3" style={{ marginTop: 4 }} onClick={(e) => e.stopPropagation()}>
           {goal.subgoals.map((sg, i) => <ManagerSubgoalRow key={sg.id} subgoal={sg} index={i} goalDueLabel={goal.dueLabel} plan={plan} onOpen={() => onOpenSubgoal(sg.id)} onOpenMaterials={() => onOpenMaterials(sg.id)} />)}
-          {!goal.subgoals.length && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Подцели ещё не добавлены</div>}
+          {!goal.subgoals.length && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Промежуточные результаты ещё не добавлены</div>}
         </div>
       )}
     </div>
@@ -925,7 +925,7 @@ function CatalogGoalRow({ goal, onClick }) {
 // ---------------- Модалка: выбор способа добавления шага ----------------
 function SubgoalMethodModal({ onClose, onManual }) {
   return (
-    <Modal open title="Как добавить шаг?" onClose={onClose} size="m"
+    <Modal open title="Как добавить промежуточный результат?" onClose={onClose} size="m"
       secondary={<Button mode="secondary" onClick={onClose}>Отменить</Button>}>
       <div className="sk-row sk-gap-3" style={{ alignItems: "stretch" }}>
         <MethodTile icon={IconEdit} title="Вручную" onClick={onManual} />
@@ -1237,7 +1237,7 @@ function AIDraftStep({ member, plan, draft, setDraft }) {
         onChange={(e) => setDraft((d) => ({ ...d, description: e.target.value || "" }))} />
 
       <div className="sk-col sk-gap-2">
-        <div className="sk-label-3">Шаги для достижения цели</div>
+        <div className="sk-label-3">Промежуточные результаты цели</div>
         {/* Input внутри плашки-шага рисует свою собственную обводку (inset box-shadow) —
             получалась обводка в обводке. Гасим внутреннюю, оставляем только внешнюю
             (у плашки), фокус всё равно виден по подсветке самого текста при клике. */}
@@ -1264,7 +1264,7 @@ function AIDraftStep({ member, plan, draft, setDraft }) {
           })}
         </div>
         <button className="sk-link-btn sk-label-3-regular" onClick={addStep} style={{ alignSelf: "flex-start", color: "var(--sk-text-secondary)" }}>
-          <span className="sk-row sk-gap-1"><IconPlusSm size={16} />Добавить шаг</span>
+          <span className="sk-row sk-gap-1"><IconPlusSm size={16} />Добавить результат</span>
         </button>
       </div>
 
@@ -1343,7 +1343,7 @@ function AIGoalAssistantModal({ member, plan, onClose, onCreate }) {
               <IconCheck size={20} color="var(--sk-text-positive)" />
             </div>
             <div className="sk-label-2">Цель добавлена в план адаптации</div>
-            <div className="sk-muted">Цель и шаги для её достижения сохранены для {member.name.split(" ")[0]}.</div>
+            <div className="sk-muted">Цель и промежуточные результаты сохранены для {member.name.split(" ")[0]}.</div>
           </div>
         )}
       </div>
@@ -1371,9 +1371,9 @@ function GoalCreateDrawer({ draft, setDraft, fromCatalog, onClose, onCreate, onA
           onChange={(date) => setDraft(d => ({ ...d, dueDate: date }))} />
 
         <div className="sk-col sk-gap-2">
-          <div className="sk-label-3">Шаги для достижения{draft.subgoals.length ? <span style={{ color: "var(--sk-text-secondary)" }}>{" " + draft.subgoals.length}</span> : ""}</div>
+          <div className="sk-label-3">Промежуточные результаты{draft.subgoals.length ? <span style={{ color: "var(--sk-text-secondary)" }}>{" " + draft.subgoals.length}</span> : ""}</div>
           <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>
-            Разбейте цель на подцели — конкретные шаги, которые помогут сотруднику её достичь. Можно добавить сейчас или позже, после создания цели.
+            Разбейте цель на промежуточные результаты — то, что должно появиться по дороге к ней. Можно добавить сейчас или позже, после создания цели.
           </div>
           {draft.subgoals.map((sg, i) => (
             <div key={i} className="sk-row sk-gap-3" style={{ justifyContent: "space-between", padding: 10, border: "1px solid var(--sk-stroke)", borderRadius: "var(--sk-radius-2)" }}>
@@ -1429,7 +1429,7 @@ function GoalDrawer({ goal, plan, editable, onClose, onChange, onAddSubgoal, onO
         )}
 
         <div className="sk-col sk-gap-2">
-          <div className="sk-label-3">Шаги для выполнения <span style={{ color: "var(--sk-text-secondary)" }}>{done}/{total}</span></div>
+          <div className="sk-label-3">Промежуточные результаты <span style={{ color: "var(--sk-text-secondary)" }}>{done}/{total}</span></div>
           {goal.subgoals.map((sg, i) => {
             const badge = NUMBER_BADGE.not_started;
             const statusIcon = STATUS_ICON[sg.status];
@@ -1529,7 +1529,7 @@ function StepMaterialsPicker({ plan, selected, onToggle }) {
 // ---------------- Выбор способа проверки шага — обязательное решение при создании:
 // либо привязать готовый оценочный лист (критерии, по которым будет приниматься
 // решение), либо оставить без него — тогда проверяющий просто выставит итог
-// (Шаг выполнен / Не выполнен / Требует доработки) без промежуточных критериев. ----------------
+// (Результат достигнут / Не выполнен / Требует доработки) без промежуточных критериев. ----------------
 function StepAssessmentPicker({ templateId, setTemplateId }) {
   const templates = D.assessmentTemplates || [];
   const checked = !!templateId;
@@ -1544,7 +1544,7 @@ function StepAssessmentPicker({ templateId, setTemplateId }) {
         <div style={{ paddingTop: 1 }}><Checkbox checked={checked} onChange={toggle} /></div>
         <span className="sk-label-4">Добавить оценочный лист</span>
       </div>
-      <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)", marginLeft: 32 }}>Готовые критерии помогут оценить выполнение шага</span>
+      <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)", marginLeft: 32 }}>Готовые критерии помогут оценить результат</span>
       <div style={{ marginLeft: 32, marginTop: 8 }}>
         {checked ? (
           <React.Fragment>
@@ -1554,7 +1554,7 @@ function StepAssessmentPicker({ templateId, setTemplateId }) {
         ) : (
           <div style={{ padding: "12px 14px", background: "var(--sk-surface-secondary)", borderRadius: "var(--sk-radius-2)" }}>
             <span className="sk-label-3-regular">
-              Без оценочного листа итог выставляется на усмотрение проверяющего: «Шаг выполнен», «Не выполнен» или «Требует доработки».
+              Без оценочного листа итог выставляется на усмотрение проверяющего: «Результат достигнут», «Не выполнен» или «Требует доработки».
             </span>
           </div>
         )}
@@ -1566,7 +1566,7 @@ function StepAssessmentPicker({ templateId, setTemplateId }) {
 function SubgoalCreateModal({ plan, initial, onClose, onCreate }) {
   const [title, setTitle] = React.useState(initial ? initial.title : "");
   const [description, setDescription] = React.useState(initial ? initial.description : "");
-  const [dueDate, setDueDate] = React.useState(initial ? initial.dueDate : new Date(2026, 0, 20));
+  const [dueDate, setDueDate] = React.useState(initial ? initial.dueDate : new Date(2026, 5, 8));
   const [reviewer, setReviewer] = React.useState(initial ? initial.reviewer : D.manager.name);
   const [checklistRefs, setChecklistRefs] = React.useState(initial ? (initial.checklistRefs || []) : []);
   // Шаблон оценочного листа не хранится в шаге напрямую (см. handleCreate ниже) — при
@@ -1593,7 +1593,7 @@ function SubgoalCreateModal({ plan, initial, onClose, onCreate }) {
   }
 
   return (
-    <Modal open title="Шаг для выполнения цели" onClose={onClose} size="m" maxHeight="calc(100vh - 64px)"
+    <Modal open title="Промежуточный результат" onClose={onClose} size="m" maxHeight="calc(100vh - 64px)"
       secondary={<Button mode="secondary" onClick={onClose}>Отменить</Button>}
       primary={<Button disabled={!canCreate} onClick={handleCreate}>{initial ? "Сохранить" : "Добавить"}</Button>}>
       <div className="sk-col sk-gap-4">
@@ -1608,7 +1608,7 @@ function SubgoalCreateModal({ plan, initial, onClose, onCreate }) {
         <StepMaterialsPicker plan={plan} selected={checklistRefs} onToggle={toggleMaterial} />
         <Divider />
         <div className="sk-col sk-gap-3">
-          <span className="sk-label-3" style={{ color: "var(--sk-text-primary)" }}>Проверка выполнения шага</span>
+          <span className="sk-label-3" style={{ color: "var(--sk-text-primary)" }}>Проверка результата</span>
           <StepAssessmentPicker templateId={templateId} setTemplateId={setTemplateId} />
         </div>
       </div>
@@ -1668,7 +1668,7 @@ function AssessmentChecklistCard({ checklist, onChange, readOnly }) {
 
 // Короткая общая подсказка про оценочный лист — без имён и без "вы/сотрудник" —
 // её читают и сотрудник, и руководитель с одного и того же места (вкладка в дровере шага).
-const ASSESSMENT_HINT_FALLBACK = "Критерии, по которым оценивают выполнение этого шага. Их отмечает проверяющий после того, как шаг отправлен на подтверждение.";
+const ASSESSMENT_HINT_FALLBACK = "Критерии, по которым оценивают этот промежуточный результат. Их отмечает проверяющий после того, как результат отправлен на подтверждение.";
 function AssessmentHintTooltip({ hint }) {
   return (
     <Tooltip placement="bottom" content={
@@ -1696,7 +1696,7 @@ function DrawerTabs({ items, active, onChange }) {
   );
 }
 
-const ASSESSMENT_DECISION_LABEL = { done: "Шаг выполнен", returned: "На доработке", not_done: "Шаг не выполнен" };
+const ASSESSMENT_DECISION_LABEL = { done: "Результат достигнут", returned: "На доработке", not_done: "Результат не достигнут" };
 const ASSESSMENT_DECISION_HUE = { done: "positive", returned: "warning", not_done: "negative" };
 
 // ---------------- Содержимое вкладки "История оценок" — только прошлые раунды решений,
@@ -1722,7 +1722,7 @@ function AssessmentTabContent({ history }) {
           ))}
         </div>
       ) : (
-        <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Пока нет оценок — они появятся здесь после проверки шага.</div>
+        <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Пока нет оценок — они появятся здесь после проверки результата.</div>
       )}
     </div>
   );
@@ -1733,7 +1733,7 @@ function AssessmentTabContent({ history }) {
 // решение в двух местах. Критерии и комментарий здесь — черновик текущего раунда оценки:
 // живут только в модалке (не пишутся в подцель), пока не принято решение; решение сразу
 // уходит записью в историю (см. onDecision), а не перезаписывает общее состояние подцели.
-// "Шаг выполнен" и "Не выполнен" — финальные, необратимые решения, поэтому перед
+// "Результат достигнут" и "Не выполнен" — финальные, необратимые решения, поэтому перед
 // применением показываем защиту от дурака (см. FinalDecisionConfirm). "Вернуть на
 // доработку" не финально — статус можно будет пересмотреть позже, подтверждение не нужно. ----------------
 function AssessmentModal({ subgoal, onClose, onDecision }) {
@@ -1767,9 +1767,9 @@ function AssessmentModal({ subgoal, onClose, onDecision }) {
           rows={3} maxLength={1000} showCount value={note} onChange={(e) => setNote(e.target.value || "")} />
         <Divider />
         <div className="sk-row sk-gap-2" style={{ flexWrap: "wrap" }}>
-          <Button variant="positive" onClick={() => setPendingAction("done")}>Подтвердить выполнение шага</Button>
+          <Button variant="positive" onClick={() => setPendingAction("done")}>Подтвердить результат</Button>
           <Button mode="secondary" variant="gray" onClick={() => submit("returned")}>На доработку</Button>
-          <Button variant="negative" mode="secondary" onClick={() => setPendingAction("not_done")}>Шаг не выполнен</Button>
+          <Button variant="negative" mode="secondary" onClick={() => setPendingAction("not_done")}>Результат не достигнут</Button>
         </div>
       </div>
     </Modal>
@@ -1779,8 +1779,8 @@ function AssessmentModal({ subgoal, onClose, onDecision }) {
 // ---------------- Защита от дурака перед финальным (необратимым) решением по шагу —
 // общий шаг подтверждения и для оценочного листа, и для ручного решения без него. ----------------
 const FINAL_DECISION_COPY = {
-  done: { title: "Отметить шаг выполненным?", body: "Шаг будет считаться выполненным. Изменить решение потом будет нельзя.", label: "Да", variant: "positive" },
-  not_done: { title: "Отметить шаг невыполненным?", body: "Шаг будет считаться невыполненным. Изменить решение потом будет нельзя.", label: "Да", variant: "negative" },
+  done: { title: "Отметить результат достигнутым?", body: "Шаг будет считаться выполненным. Изменить решение потом будет нельзя.", label: "Да", variant: "positive" },
+  not_done: { title: "Отметить результат недостигнутым?", body: "Шаг будет считаться невыполненным. Изменить решение потом будет нельзя.", label: "Да", variant: "negative" },
 };
 function FinalDecisionConfirm({ action, onBack, onConfirm }) {
   const c = FINAL_DECISION_COPY[action];
@@ -1889,8 +1889,8 @@ function SubgoalDrawer({ plan, goal, subgoal, onClose, onChange, onOpenChecklist
     : (needsAssessment && isReview) ? <Button size="s" onClick={() => setAssessmentOpen(true)} style={{ background: "var(--sk-warning)", color: "var(--sk-text-contrast)" }}>Оценить выполнение</Button>
     : (isReview && !needsAssessment) ? (
       <div className="sk-row sk-gap-1">
-        <Button size="s" variant="positive" onClick={() => setPendingAction("done")}>Шаг выполнен</Button>
-        <Button size="s" variant="negative" mode="secondary" onClick={() => setPendingAction("not_done")}>Шаг не выполнен</Button>
+        <Button size="s" variant="positive" onClick={() => setPendingAction("done")}>Результат достигнут</Button>
+        <Button size="s" variant="negative" mode="secondary" onClick={() => setPendingAction("not_done")}>Результат не достигнут</Button>
         <Button size="s" variant="gray" onClick={onReturn}>На доработку</Button>
       </div>
     )
@@ -1954,7 +1954,7 @@ function SubgoalDrawer({ plan, goal, subgoal, onClose, onChange, onOpenChecklist
 
         <CollapsibleSection title={<span>Полезные материалы{links.length ? <span style={{ color: "var(--sk-text-secondary)" }}>{" " + links.length}</span> : ""}</span>} defaultOpen={false}>
           <div className="sk-col sk-gap-2" style={{ padding: 12, background: "var(--sk-surface-secondary)", borderRadius: "var(--sk-radius-3)" }}>
-            {!links.length && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Добавьте вспомогательные материалы для выполнения этого шага</div>}
+            {!links.length && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Добавьте вспомогательные материалы для достижения этого результата</div>}
             {links.map(({ item, stage }) => {
               const Icon = ELEMENT_ICON[item.kind] || IconFileText;
               return (
@@ -2006,7 +2006,7 @@ function ReturnCommentModal({ onClose, onSubmit }) {
   const [comment, setComment] = React.useState("");
   const canSubmit = comment.trim().length > 0;
   return (
-    <Modal open title="Вернуть подцель в работу" onClose={onClose} size="s"
+    <Modal open title="Вернуть результат в работу" onClose={onClose} size="s"
       secondary={<Button mode="secondary" onClick={onClose}>Отменить</Button>}
       primary={<Button disabled={!canSubmit} onClick={() => onSubmit(comment.trim())}>Вернуть в работу</Button>}>
       <Textarea label="Комментарий" required helper="Обязателен — объясните сотруднику, что нужно доработать"

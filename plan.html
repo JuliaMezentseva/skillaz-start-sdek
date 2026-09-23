@@ -85,7 +85,7 @@ const CHECKPOINT_STEPS = [
 ];
 
 const MIN_TAB_NOTE = "Ваш маршрут адаптации — от первых шагов до погружения в роль. Отмечайте пункты по мере прохождения.";
-const MAX_TAB_NOTE = "Здесь — ваши рабочие цели по плану. Откройте цель, чтобы увидеть шаги и отслеживать прогресс.";
+const MAX_TAB_NOTE = "Здесь — ваши рабочие цели по плану. Откройте цель, чтобы увидеть промежуточные результаты и отслеживать прогресс.";
 
 function goalProgress(goal) {
   const total = goal.subgoals.length;
@@ -431,7 +431,7 @@ function SubgoalDrawer({ plan, goal, subgoal, onClose, onSubmit, onAddComment, o
           disabled={!(subgoal.status === "in_progress" || subgoal.status === "returned")} />
 
         {subgoal.status === "not_started" && (
-          <Alert hue="neutral">Сначала возьмите в работу всю цель «{goal.title}» — тогда этот шаг станет доступен для выполнения.</Alert>
+          <Alert hue="neutral">Сначала возьмите в работу всю цель «{goal.title}» — тогда этот промежуточный результат станет доступен.</Alert>
         )}
         {(subgoal.status === "in_progress" || subgoal.status === "returned") && (
           <div className="sk-col sk-gap-2" style={{ position: "sticky", bottom: 0, background: "var(--sk-surface-page)", paddingTop: 8 }}>
