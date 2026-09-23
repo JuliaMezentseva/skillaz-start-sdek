@@ -415,19 +415,19 @@ window.SITE_DATA = {
         },
         cp2: {
           id: "cp2",
-          title: "Контрольная точка на экваторе",
-          short: "Экватор · 45 дней",
-          date: "16.04.26",
-          dateLabel: "16 апреля",
-          dueLabel: "до 20 апреля",
-          dueLabelShort: "20 апр",
-          daysLeftLabel: "Осталось 4 дня",
+          title: "Контрольная точка: первый месяц",
+          short: "Первый месяц · 30 дней",
+          date: "31.03.26",
+          dateLabel: "31 марта",
+          dueLabel: "до 3 апреля",
+          dueLabelShort: "3 апр",
+          daysLeftLabel: "Осталось 3 дня",
           reviewer: "Андрей Рогов",
           status: "pending",
           agenda: [
             "Сверьте оценку прогресса: как её видит сотрудник и как руководитель.",
-            "Обсудите результаты по целям на текущую дату.",
-            "Решите, что менять во второй половине испытательного срока.",
+            "Обсудите результаты по первой цели и готовность ко второй.",
+            "Решите, что менять в оставшиеся два месяца.",
           ],
           survey: [
             { q: "Насколько вам понятны цели и ожидаемые результаты на испытательный срок?", type: "scale", answer: null, minLabel: "Совсем не понятны", maxLabel: "Полностью понятны" },
@@ -854,7 +854,7 @@ window.SITE_DATA = {
       helper: "Сергей Панин",
       risks: [
         "Прошло 50% срока плана, цели ещё в работе",
-        "Сотрудник поставил низкую оценку в контрольной точке на экваторе",
+        "Сотрудник поставил низкую оценку в контрольной точке первого месяца",
         "Просрочено 40% обязательных элементов маршрута",
       ],
     },
@@ -910,7 +910,7 @@ window.SITE_DATA = {
   managerActions: [
     { id: "a1", type: "goal", title: "Создать цели в плане", employeeId: "dmitry", employee: "Дмитрий Лазарев", due: "17 мар 26", dueSort: "2026-03-17" },
     { id: "a2b", type: "subgoal", title: "Подтвердить подцель «Провести 3 встречи самостоятельно»", employeeId: "irina", employee: "Ирина Ковалёва", due: "30 апр 26", dueSort: "2026-04-30" },
-    { id: "a2c", type: "checkin", title: "Провести контрольную точку на экваторе", employeeId: "irina", employee: "Ирина Ковалёва", due: "20 апр 26", dueSort: "2026-04-20" },
+    { id: "a2c", type: "checkin", title: "Провести контрольную точку «Первый месяц»", employeeId: "irina", employee: "Ирина Ковалёва", due: "3 апр 26", dueSort: "2026-04-03" },
     { id: "a4", type: "task", title: "Разобрать риски по плану и назначить встречу", employeeId: "pavel", employee: "Павел Сотников", due: "18 мар 26", dueSort: "2026-03-18" },
     { id: "a5", type: "goal", title: "Пересмотреть сроки целей", employeeId: "pavel", employee: "Павел Сотников", due: "20 мар 26", dueSort: "2026-03-20" },
     { id: "a7", type: "review", title: "Провести финальное ревью испытательного срока", employeeId: "natalia", employee: "Наталья Гуреева", due: "10 мар 26", dueSort: "2026-03-10" },
@@ -925,7 +925,7 @@ window.SITE_DATA = {
   assistantMe: { name: "Сергей Панин", role: "Первый наставник · ведущий менеджер по привлечению", email: "s.panin@cdek.ru" },
   assistantActions: [
     { id: "as1", type: "subgoal", title: "Оценить подцель «Провести 3 встречи самостоятельно»", employeeId: "irina", employee: "Ирина Ковалёва", planId: "onboarding", due: "30 апр 26", dueSort: "2026-04-30" },
-    { id: "as2", type: "checkin", title: "Пройти контрольную точку «Экватор»", employeeId: "artem", employee: "Артём Волошин", planId: "artem_dev", due: "20 мар 26", dueSort: "2026-03-20" },
+    { id: "as2", type: "checkin", title: "Пройти контрольную точку «Первый месяц»", employeeId: "artem", employee: "Артём Волошин", planId: "artem_dev", due: "20 мар 26", dueSort: "2026-03-20" },
   ],
 };
 
