@@ -918,16 +918,44 @@ window.SITE_DATA = {
 
   // Плоский список задач руководителя для раздела "Мои действия".
   // due* — незавершённые (сортируем/группируем по дедлайну), doneAt — завершённые.
+  // Плоский список задач руководителя для раздела "Мои действия".
+  // due* — незавершённые (сортируем/группируем по дедлайну), doneAt — завершённые.
+  // Сегодня у руководителя — managerToday (15.03.26), поэтому набор расписан так,
+  // чтобы были заполнены все корзины: просрочено, сегодня, на этой неделе,
+  // следующий месяц и выполненные. Демо не должно выглядеть как список долгов.
   managerActions: [
-    { id: "a1", type: "goal", title: "Создать цели в плане", employeeId: "dmitry", employee: "Дмитрий Лазарев", due: "17 мар 26", dueSort: "2026-03-17" },
-    { id: "a2b", type: "subgoal", title: "Оценить подцель «Провести 3 встречи самостоятельно»", employeeId: "irina", employee: "Ирина Ковалёва", due: "30 апр 26", dueSort: "2026-04-30" },
-    { id: "a2c", type: "checkin", title: "Провести контрольную точку «Первый месяц»", employeeId: "irina", employee: "Ирина Ковалёва", due: "3 апр 26", dueSort: "2026-04-03" },
-    { id: "a4", type: "task", title: "Разобрать риски по плану и назначить встречу", employeeId: "pavel", employee: "Павел Сотников", due: "18 мар 26", dueSort: "2026-03-18" },
-    { id: "a5", type: "goal", title: "Пересмотреть сроки целей", employeeId: "pavel", employee: "Павел Сотников", due: "20 мар 26", dueSort: "2026-03-20" },
+    // --- Просрочено (до 15 марта) ---
     { id: "a7", type: "review", title: "Провести финальное ревью испытательного срока", employeeId: "natalia", employee: "Наталья Гуреева", due: "10 мар 26", dueSort: "2026-03-10" },
+    { id: "a11", type: "checkin", title: "Провести контрольную точку «Первая неделя»", employeeId: "artem", employee: "Артём Волошин", due: "12 мар 26", dueSort: "2026-03-12" },
+    { id: "a12", type: "subgoal", title: "Подтвердить подцель «Разобрать тарифы с наставником»", employeeId: "artem", employee: "Артём Волошин", due: "13 мар 26", dueSort: "2026-03-13" },
 
-    { id: "a3", type: "subgoal", title: "Подтвердить подцель «Пройти аудит звонков с руководителем»", employeeId: "irina", employee: "Ирина Ковалёва", doneAt: "31 мар 26, 09:40", doneBucket: "month" },
+    // --- Сегодня (15 марта) ---
+    { id: "a13", type: "checkin", title: "Провести контрольную точку «Первый месяц»", employeeId: "pavel", employee: "Павел Сотников", due: "15 мар 26", dueSort: "2026-03-15" },
+    { id: "a14", type: "task", title: "Встреча 1:1 по итогам первого месяца", employeeId: "irina", employee: "Ирина Ковалёва", due: "15 мар 26", dueSort: "2026-03-15" },
+
+    // --- На этой неделе (16–22 марта) ---
+    { id: "a15", type: "approval", title: "Согласовать план адаптации «Менеджер по привлечению клиентов»", employeeId: "dmitry", employee: "Дмитрий Лазарев", due: "16 мар 26", dueSort: "2026-03-16" },
+    { id: "a1", type: "goal", title: "Создать цели в плане", employeeId: "dmitry", employee: "Дмитрий Лазарев", due: "17 мар 26", dueSort: "2026-03-17" },
+    { id: "a4", type: "task", title: "Разобрать риски по плану и назначить встречу", employeeId: "pavel", employee: "Павел Сотников", due: "18 мар 26", dueSort: "2026-03-18" },
+    { id: "a16", type: "subgoal", title: "Подтвердить подцель «Провести 5 встреч вместе с наставником»", employeeId: "artem", employee: "Артём Волошин", due: "19 мар 26", dueSort: "2026-03-19" },
+    { id: "a5", type: "goal", title: "Пересмотреть сроки целей", employeeId: "pavel", employee: "Павел Сотников", due: "20 мар 26", dueSort: "2026-03-20" },
+    { id: "a17", type: "task", title: "Назначить второго наставника на период адаптации", employeeId: "dmitry", employee: "Дмитрий Лазарев", due: "21 мар 26", dueSort: "2026-03-21" },
+
+    // --- Следующий месяц ---
+    { id: "a18", type: "checkin", title: "Провести контрольную точку «Первый месяц»", employeeId: "artem", employee: "Артём Волошин", due: "2 апр 26", dueSort: "2026-04-02" },
+    { id: "a2c", type: "checkin", title: "Провести контрольную точку «Первый месяц»", employeeId: "irina", employee: "Ирина Ковалёва", due: "3 апр 26", dueSort: "2026-04-03" },
+    { id: "a19", type: "goal", title: "Создать цели в плане", employeeId: "ekaterina", employee: "Екатерина Мальцева", due: "6 апр 26", dueSort: "2026-04-06" },
+    { id: "a20", type: "subgoal", title: "Подтвердить подцель «Подготовить коммерческое предложение»", employeeId: "artem", employee: "Артём Волошин", due: "17 апр 26", dueSort: "2026-04-17" },
+    { id: "a2b", type: "subgoal", title: "Оценить подцель «Провести 3 встречи самостоятельно»", employeeId: "irina", employee: "Ирина Ковалёва", due: "30 апр 26", dueSort: "2026-04-30" },
+    { id: "a21", type: "review", title: "Провести финальное ревью испытательного срока", employeeId: "artem", employee: "Артём Волошин", due: "4 май 26", dueSort: "2026-05-04" },
+
+    // --- Выполненные ---
+    { id: "a22", type: "checkin", title: "Провести контрольную точку «Первая неделя»", employeeId: "irina", employee: "Ирина Ковалёва", doneAt: "10 мар 26, 16:30", doneBucket: "week" },
+    { id: "a23", type: "subgoal", title: "Подтвердить подцель «Совершить не менее 25 звонков за первую неделю»", employeeId: "irina", employee: "Ирина Ковалёва", doneAt: "13 мар 26, 11:05", doneBucket: "week" },
+    { id: "a24", type: "task", title: "Познакомить с командой и распределить первые задачи", employeeId: "irina", employee: "Ирина Ковалёва", doneAt: "11 мар 26, 09:20", doneBucket: "week" },
     { id: "a8", type: "approval", title: "Согласовать план адаптации «Пребординг»", employeeId: "ekaterina", employee: "Екатерина Мальцева", doneAt: "5 мар 26, 09:10", doneBucket: "month" },
+    { id: "a25", type: "task", title: "Назначить первого наставника", employeeId: "irina", employee: "Ирина Ковалёва", doneAt: "2 мар 26, 10:40", doneBucket: "month" },
+    { id: "a26", type: "approval", title: "Согласовать план адаптации «Менеджер по развитию партнёрских продаж»", employeeId: "artem", employee: "Артём Волошин", doneAt: "2 фев 26, 14:15", doneBucket: "other" },
     { id: "a10", type: "task", title: "Согласовать условия испытательного срока с руководителем", employeeId: "artem", employee: "Артём Волошин", doneAt: "2 фев 26, 10:00", doneBucket: "other" },
   ],
 
