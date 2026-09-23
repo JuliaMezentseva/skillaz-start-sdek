@@ -2113,26 +2113,11 @@ function ElementModal({ item, onClose }) {
 
 // ---------------- Контрольная точка (проведение руководителем) ----------------
 const SCALE_FACES_STATIC = { 1: "😞", 2: "🙁", 3: "😐", 4: "🙂", 5: "😄" };
-const RISK_LEVELS = [
-  { value: "none", label: "Риск отсутствует" },
-  { value: "low", label: "Низкий риск" },
-  { value: "medium", label: "Средний риск" },
-  { value: "high", label: "Высокий риск" },
-];
-const RISK_HUE = { none: "positive", low: "neutral", medium: "warning", high: "negative" };
-// Цвета для активной риск-кнопки в незавершённой КТ — те же токены, что у Tag (SK_TAG_HUES),
-// чтобы выбранная пилюля до завершения совпадала по цвету с финальным Tag после завершения.
-const RISK_BUTTON_COLORS = {
-  positive: { bg: "var(--sk-positive-secondary)", color: "var(--sk-text-positive)", stroke: "var(--sk-text-positive)" },
-  neutral: { bg: "var(--sk-surface-secondary)", color: "var(--sk-text-primary)", stroke: "var(--sk-stroke-accent)" },
-  warning: { bg: "var(--sk-warning-secondary)", color: "var(--sk-text-warning-dark)", stroke: "var(--sk-text-warning-dark)" },
-  negative: { bg: "var(--sk-negative-secondary)", color: "var(--sk-text-negative)", stroke: "var(--sk-text-negative)" },
-};
 
 function ManagerCheckpointDrawer({ checkpoint, viewerName, employee, canEdit, isUpcoming, onFinish, onAddComment, onUpdate, onClose }) {
   const [employeeSummary, setEmployeeSummary] = React.useState(checkpoint.employeeSummary || "");
   const [internalReport, setInternalReport] = React.useState(checkpoint.internalReport || "");
-  const [riskLevel, setRiskLevel] = React.useState(checkpoint.riskLevel || "");
+  
   const [comment, setComment] = React.useState("");
   const [drawerTab, setDrawerTab] = React.useState("comments");
   // Пока точка ещё не наступила, руководитель может донастроить срок/проверяющего/повестку —
@@ -2143,7 +2128,7 @@ function ManagerCheckpointDrawer({ checkpoint, viewerName, employee, canEdit, is
   const [agendaDraft, setAgendaDraft] = React.useState(checkpoint.agenda || []);
   const done = checkpoint.status === "done";
   const surveyReady = checkpoint.surveySubmitted || done;
-  const reportReady = !!(employeeSummary.trim() && internalReport.trim() && riskLevel);
+  const reportReady = !!(employeeSummary.trim() && internalReport.trim());
   const canFinish = canEdit && !done && surveyReady && reportReady;
   const fieldsDisabled = !surveyReady || !canEdit;
   const canSaveEdit = dateDraft.trim() && reviewerDraft && agendaDraft.some(a => a.trim());
@@ -2170,7 +2155,7 @@ function ManagerCheckpointDrawer({ checkpoint, viewerName, employee, canEdit, is
       onClose={onClose} size="m" headerActions={headerAction}
       primary={editing
         ? <Button disabled={!canSaveEdit} onClick={saveEditing} style={{ width: "100%" }}>Сохранить изменения</Button>
-        : (!done && canEdit ? <Button disabled={!canFinish} onClick={() => onFinish({ employeeSummary: employeeSummary.trim(), internalReport: internalReport.trim(), riskLevel })} style={{ width: "100%" }}>Завершить контрольную точку</Button> : null)}
+        : (!done && canEdit ? <Button disabled={!canFinish} onClick={() => onFinish({ employeeSummary: employeeSummary.trim(), internalReport: internalReport.trim() })} style={{ width: "100%" }}>Завершить контрольную точку</Button> : null)}
       secondary={editing ? <Button mode="secondary" onClick={() => setEditing(false)}>Отменить</Button> : null}>
       <div className="sk-col sk-gap-5">
         <div className="sk-row" style={{ justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
@@ -2294,32 +2279,7 @@ function ManagerCheckpointDrawer({ checkpoint, viewerName, employee, canEdit, is
           )}
         </div>
 
-        <div className="sk-col sk-gap-2">
-          <div className="sk-row sk-gap-1"><span className="sk-label-3">Уровень риска</span><span style={{ color: "var(--sk-text-negative)" }}>*</span></div>
-          {done ? (
-            <Tag size="s" hue={RISK_HUE[riskLevel] || "neutral"} style={{ alignSelf: "flex-start" }}>
-              {(RISK_LEVELS.find((r) => r.value === riskLevel) || {}).label || "—"}
-            </Tag>
-          ) : (
-            <div className="sk-row sk-gap-2" style={{ flexWrap: "wrap" }}>
-              {RISK_LEVELS.map((r) => {
-                const active = riskLevel === r.value;
-                const c = RISK_BUTTON_COLORS[RISK_HUE[r.value]] || RISK_BUTTON_COLORS.neutral;
-                return (
-                  <button key={r.value} type="button" disabled={fieldsDisabled} onClick={() => setRiskLevel(r.value)}
-                    className={fieldsDisabled ? "" : "sk-clickable"} style={{
-                      padding: "7px 14px", borderRadius: "var(--sk-radius-full)", border: "1.5px solid " + (active ? c.stroke : "var(--sk-stroke)"),
-                      background: active ? c.bg : "var(--sk-surface-page)",
-                      color: active ? c.color : "var(--sk-text-secondary)",
-                      font: active ? "var(--sk-label-3)" : "var(--sk-label-3-regular)",
-                      cursor: fieldsDisabled ? "default" : "pointer", opacity: fieldsDisabled ? 0.5 : 1,
-                    }}>{r.label.replace(" риск", "").replace("Риск ", "")}</button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
+        
         <Divider />
         <DrawerTabs items={[{
           id: "comments",
