@@ -460,18 +460,18 @@ function buildTeamContent() {
   })).sort((a, b) => (b.riskTag ? 1 : 0) - (a.riskTag ? 1 : 0));
   // Демо: на сводном табе "Всё" — три конкретных сотрудника с их текущими действиями,
   // риск (Дарья) выше остальных, дальше обычные плановые действия руководителя (Игорь, Светлана).
-  const igorRow = { kind: "ИПР", title: "Игорь Савченко", subtitle: "Назначить план ИПР · до 20 сентября", tone: "", href: "../manager/plan.html?employee=igor" };
+  const igorRow = { kind: "ИПР", title: "Дмитрий Лазарев", subtitle: "Назначить план ИПР · до 20 сентября", tone: "", href: "../manager/plan.html?employee=dmitry" };
   const allRows = [
-    rows.find((r) => r.title === "Дарья Белозёрова"),
+    rows.find((r) => r.title === "Павел Сотников"),
     igorRow,
-    rows.find((r) => r.title === "Светлана Морозова"),
+    rows.find((r) => r.title === "Наталья Гуреева"),
   ].filter(Boolean);
   return {
     all: { rows: allRows, emptyText: "Сейчас нет сотрудников, которым нужно ваше внимание." },
     adaptation: { rows, emptyText: "Сейчас нет сотрудников, которым нужно ваше внимание." },
     learning: { rows: [{ kind: "Обучение", title: "Несколько сотрудников близки к сроку обучения", subtitle: "Стоит проверить назначения команды", tone: "", query: "Покажи просроченные действия команды" }], emptyText: "" },
-    assessment: { rows: [{ kind: "Оценка", title: "Дарья Белозёрова", subtitle: "Не прошла самооценку 360 · до 20 августа", tone: "warn", href: "../manager/plan.html?employee=darya" }], emptyText: "Сейчас нет сотрудников, которым нужно ваше внимание." },
-    idp: { rows: [{ kind: "ИПР", title: "Алексей Ковалев", subtitle: "Черновик ИПР ждёт согласования · до 15 сентября", tone: "warn", href: "../manager/plan.html?employee=alexey" }], emptyText: "Сейчас нет сотрудников, которым нужно ваше внимание." },
+    assessment: { rows: [{ kind: "Оценка", title: "Павел Сотников", subtitle: "Не прошла самооценку 360 · до 20 августа", tone: "warn", href: "../manager/plan.html?employee=pavel" }], emptyText: "Сейчас нет сотрудников, которым нужно ваше внимание." },
+    idp: { rows: [{ kind: "ИПР", title: "Артём Волошин", subtitle: "Черновик ИПР ждёт согласования · до 15 сентября", tone: "warn", href: "../manager/plan.html?employee=artem" }], emptyText: "Сейчас нет сотрудников, которым нужно ваше внимание." },
   };
 }
 

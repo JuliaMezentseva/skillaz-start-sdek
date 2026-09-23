@@ -793,11 +793,20 @@ function RightPanel({ plan, overallPct, checkpoints, onOpenCheckpoint, showCheck
               {cps.map((cp, i) => {
                 const isCurrent = i === firstPendingIndex;
                 return (
-                  <div key={cp.id} className="sk-row sk-gap-3" style={{ alignItems: "center" }}>
+                  <div key={cp.id} className={"sk-row sk-gap-3" + (cp.status === "done" ? " sk-clickable" : "")}
+                    style={{ alignItems: "center" }}
+                    onClick={cp.status === "done" ? () => onOpenCheckpoint(cp.id) : undefined}>
+                    {/* Пройденную точку помечаем галочкой и делаем кликабельной: к её
+                        итогам возвращаются — резюме встречи там же, где и было. */}
+                    {cp.status === "done" && (
+                      <span style={{ flexShrink: 0, display: "flex" }}><IconCheck size={16} color="var(--sk-positive)" /></span>
+                    )}
                     <div className="sk-col" style={{ gap: 0, flex: 1, minWidth: 0 }}>
-                      <div className="sk-label-4-regular">{cpMeetingName(cp)}</div>
+                      <div className="sk-label-4-regular" style={{ color: cp.status === "done" ? "var(--sk-text-secondary)" : "var(--sk-text-primary)" }}>{cpMeetingName(cp)}</div>
                       <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)", whiteSpace: "nowrap" }}>
-                        {isCurrent ? "до " + (cp.dueLabelShort || cp.dateLabel) : (cp.dateLabel || cp.date)}
+                        {cp.status === "done" ? "Пройдена · " + (cp.dateLabel || cp.date)
+                          : isCurrent ? "до " + (cp.dueLabelShort || cp.dateLabel)
+                          : (cp.dateLabel || cp.date)}
                       </div>
                     </div>
                     {isCurrent && (
