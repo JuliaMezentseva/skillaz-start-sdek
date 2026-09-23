@@ -495,15 +495,25 @@ function StatusTag({ status, size = "s", style }) {
 }
 
 // ---------------- Фото участников плана ----------------
-// В моках только двое реальных персонажей по полу: демо-сотрудник (Никита) и
-// коллега-мужчина делят один референсный портрет, женщины-участницы — другой.
-// Строго по полу, чтобы не перепутать карточки.
+// В моках два референсных портрета, поэтому раздаём их строго по полу —
+// иначе карточки участников путаются. Кто не в списке — показывается инициалами.
 const PERSON_PHOTOS = {
-  "Никита Гаврилов": "../assets/avatar-male.jpg",
-  "Анна Козлова": "../assets/avatar-female.jpg",
-  "Елена Петрова": "../assets/avatar-female.jpg",
-  "Юлия Степанова": "../assets/avatar-female.jpg",
-  "Дмитрий Волков": "../assets/avatar-male.jpg",
+  // Женщины
+  "Ирина Ковалёва": "../assets/avatar-female.jpg",
+  "Ольга Тимофеева": "../assets/avatar-female.jpg",
+  "Марина Ильина": "../assets/avatar-female.jpg",
+  "Наталья Гуреева": "../assets/avatar-female.jpg",
+  "Екатерина Мальцева": "../assets/avatar-female.jpg",
+  "Ольга Соколова": "../assets/avatar-female.jpg",
+  "Ирина Волкова": "../assets/avatar-female.jpg",
+  // Мужчины
+  "Андрей Рогов": "../assets/avatar-male.jpg",
+  "Сергей Панин": "../assets/avatar-male.jpg",
+  "Павел Сотников": "../assets/avatar-male.jpg",
+  "Дмитрий Лазарев": "../assets/avatar-male.jpg",
+  "Артём Волошин": "../assets/avatar-male.jpg",
+  "Кирилл Дёмин": "../assets/avatar-male.jpg",
+  "Сергей Орлов": "../assets/avatar-male.jpg",
 };
 function personPhoto(name) {
   return PERSON_PHOTOS[name] || null;
