@@ -121,7 +121,7 @@ function ChecklistReadStage({ stage, index }) {
     <div className="sk-col sk-gap-2">
       <div className="sk-row sk-clickable" style={{ justifyContent: "space-between" }} onClick={() => setOpen((o) => !o)}>
         <div className="sk-col" style={{ gap: 0 }}>
-          <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>Этап {index}</span>
+          <span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>{stage.kind === "library" ? "Библиотека" : "Этап " + index}</span>
           <div className="sk-row sk-gap-2"><span className="sk-label-3">{stage.title}</span><span className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>{done}/{total}</span></div>
         </div>
         {open ? <IconChevronUp size={16} color="var(--sk-icon-secondary)" /> : <IconChevronDown size={16} color="var(--sk-icon-secondary)" />}
@@ -155,7 +155,7 @@ function PlanTab({ record, view }) {
     );
   }
 
-  const totalChecklist = plan.stages.flatMap((s) => s.items.filter((i) => i.kind !== "checkpoint"));
+  const totalChecklist = plan.stages.filter((s) => s.kind !== "library").flatMap((s) => s.items.filter((i) => i.kind !== "checkpoint"));
   const doneChecklist = totalChecklist.filter((i) => i.done).length;
   const checklistPct = totalChecklist.length ? Math.round((doneChecklist / totalChecklist.length) * 100) : 0;
   const goalsDoneCount = plan.goals.filter((g) => g.subgoals.length && g.subgoals.every((s) => s.status === "done")).length;
@@ -311,7 +311,7 @@ function Page() {
   }
 
   const plan0 = record0.planId ? D.plans[record0.planId] : null;
-  const totalChecklist0 = plan0 ? plan0.stages.flatMap((s) => s.items.filter((i) => i.kind !== "checkpoint")) : [];
+  const totalChecklist0 = plan0 ? plan0.stages.filter((s) => s.kind !== "library").flatMap((s) => s.items.filter((i) => i.kind !== "checkpoint")) : [];
   const checklistPct0 = totalChecklist0.length ? Math.round((totalChecklist0.filter((i) => i.done).length / totalChecklist0.length) * 100) : (record0.checklistProgress || 0);
   const goalsDoneCount0 = plan0 ? plan0.goals.filter((g) => g.subgoals.length && g.subgoals.every((s) => s.status === "done")).length : 0;
   const goalsPct0 = plan0 && plan0.goals.length ? Math.round((goalsDoneCount0 / plan0.goals.length) * 100) : 0;

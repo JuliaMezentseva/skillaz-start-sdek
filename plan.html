@@ -23,7 +23,7 @@ const { AppShell, StatusTag, Icons, personPhoto } = window.Site;
 const {
   IconArrowLeft, IconCheck, IconClock, IconFileText, IconLink2, IconMessageCircle,
   IconHelpCircle, IconInfo, IconTarget, IconMapPin, IconPhone, IconSend,
-  IconChevronUp, IconChevronDown, IconX, IconClipboard, IconCalendar,
+  IconChevronUp, IconChevronDown, IconX, IconClipboard, IconBookOpen, IconCalendar,
 } = Icons;
 const D = window.SITE_DATA;
 // dueLabel в данных непоследователен: где-то уже "до 5 апр", где-то просто "5 апр".
@@ -108,9 +108,13 @@ function findChecklistItem(plan, id) {
 // яркость, иначе содержимое невозможно прочитать; о блокировке говорят
 // неактивные чекбоксы. Статус читается по цвету фона заголовка и подписи справа.
 function StageBlock({ stage, index, onOpenItem, onOpenCheckpoint }) {
-  const locked = stage.status === "locked";
-  const completed = stage.status === "completed";
-  const current = !locked && !completed;
+  // Библиотека — этап без срока и без прогресса: материалы, к которым сотрудник
+  // возвращается в любой момент. Не «текущий» и не «заблокированный»: открывается
+  // свободно, чекбоксов нет, в процент прохождения маршрута не входит.
+  const library = stage.kind === "library";
+  const locked = !library && stage.status === "locked";
+  const completed = !library && stage.status === "completed";
+  const current = !library && !locked && !completed;
   const [open, setOpen] = React.useState(current);
   return (
     <div className="sk-col sk-gap-2" style={{
@@ -129,7 +133,7 @@ function StageBlock({ stage, index, onOpenItem, onOpenCheckpoint }) {
             background: completed ? "var(--sk-positive)" : current ? "var(--sk-accent)" : "var(--sk-surface-page)",
             color: completed || current ? "var(--sk-text-contrast)" : "var(--sk-text-tertiary)",
             border: locked ? "1.5px solid var(--sk-stroke)" : "none", font: "var(--sk-label-4)",
-          }}>{completed ? <IconCheck size={12} /> : index}</span>
+          }}>{library ? <IconBookOpen size={12} /> : completed ? <IconCheck size={12} /> : index}</span>
           <span className="sk-label-3" style={{ color: completed ? "var(--sk-text-positive)" : current ? "var(--sk-text-accent)" : "var(--sk-text-secondary)" }}>{stage.title}</span>
         </div>
         <div className="sk-row sk-gap-2" style={{ alignItems: "center" }}>
@@ -153,9 +157,15 @@ function StageBlock({ stage, index, onOpenItem, onOpenCheckpoint }) {
           ) : (
             <div key={item.id} className={"sk-check-row" + (locked ? " is-static" : "")}
               onClick={locked ? undefined : () => onOpenItem(item)}>
-              <div style={{ paddingTop: 2 }} onClick={(e) => e.stopPropagation()}>
-                <Checkbox checked={!!item.done} disabled={locked} onChange={() => onOpenItem(item, true)} />
-              </div>
+              {library ? (
+                // В библиотеке нечего «закрывать»: вместо чекбокса — иконка типа материала,
+                // строка остаётся кликабельной и открывает сам материал.
+                <span style={{ paddingTop: 2, color: "var(--sk-icon-secondary)" }}><IconBookOpen size={16} /></span>
+              ) : (
+                <div style={{ paddingTop: 2 }} onClick={(e) => e.stopPropagation()}>
+                  <Checkbox checked={!!item.done} disabled={locked} onChange={() => onOpenItem(item, true)} />
+                </div>
+              )}
               <div className="sk-col" style={{ flex: 1, gap: item.done ? 0 : 2 }}>
                 <div className="sk-label-3-regular" style={{ textDecoration: item.done ? "line-through" : "none", color: item.done ? "var(--sk-text-secondary)" : "var(--sk-text-primary)" }}>{item.title}</div>
                 {!item.done && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>{ELEMENT_LABEL[item.kind]}{item.date ? " · " + item.date : ""}</div>}
@@ -748,7 +758,7 @@ function Page() {
     showToast("Ответы отправлены");
   }
 
-  const totalChecklist = plan.stages.flatMap((s) => s.items.filter((i) => i.kind !== "checkpoint"));
+  const totalChecklist = plan.stages.filter((s) => s.kind !== "library").flatMap((s) => s.items.filter((i) => i.kind !== "checkpoint"));
   const doneChecklist = totalChecklist.filter((i) => i.done).length;
   const checklistPct = totalChecklist.length ? Math.round((doneChecklist / totalChecklist.length) * 100) : 0;
   const goalsDoneCount = plan.goals.filter((g) => g.subgoals.length && g.subgoals.every((s) => s.status === "done")).length;

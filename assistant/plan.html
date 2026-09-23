@@ -23,7 +23,7 @@ const { AppShell, StatusTag, Icons, personPhoto } = window.Site;
 const {
   IconArrowLeft, IconCheck, IconClock, IconFileText, IconLink2, IconMessageCircle,
   IconHelpCircle, IconInfo, IconTarget, IconMapPin, IconPhone, IconMail, IconSend,
-  IconChevronUp, IconChevronDown, IconX, IconAlertCircle, IconTrash, IconSearch, IconClipboard, IconPlusSm,
+  IconChevronUp, IconChevronDown, IconX, IconAlertCircle, IconTrash, IconSearch, IconClipboard, IconBookOpen, IconPlusSm,
 } = Icons;
 const D = window.SITE_DATA;
 function stripDuePrefix(label) {
@@ -218,7 +218,7 @@ function Page() {
     setPlan(prev => ({ ...prev, checkpoints: { ...prev.checkpoints, [cpId]: { ...prev.checkpoints[cpId], comments: [...(prev.checkpoints[cpId].comments || []), { author: D.assistantMe.name, date: "Сегодня", text }] } } }));
   }
 
-  const totalChecklist = plan.stages.flatMap(s => s.items.filter(i => i.kind !== "checkpoint"));
+  const totalChecklist = plan.stages.filter(s => s.kind !== "library").flatMap(s => s.items.filter(i => i.kind !== "checkpoint"));
   const doneChecklist = totalChecklist.filter(i => i.done).length;
   const checklistPct = totalChecklist.length ? Math.round((doneChecklist / totalChecklist.length) * 100) : 0;
   const goalsDoneCount = plan.goals.filter(g => g.subgoals.length && g.subgoals.every(s => s.status === "done")).length;
@@ -773,8 +773,9 @@ function ChecklistPickerModal({ plan, selected, onToggle, onClose }) {
 // предстоит дальше. Отметки в этом режиме недоступны в любом случае: чекбоксы
 // всегда disabled, а ElementModal здесь только для чтения.
 function ManagerStageBlock({ stage, index, onOpenItem, onAdd }) {
-  const locked = stage.status === "locked";
-  const completed = stage.status === "completed";
+  const library = stage.kind === "library";
+  const locked = !library && stage.status === "locked";
+  const completed = !library && stage.status === "completed";
   const current = !locked && !completed;
   const [open, setOpen] = React.useState(current);
   return (
@@ -808,7 +809,7 @@ function ManagerStageBlock({ stage, index, onOpenItem, onAdd }) {
         <div className="sk-col sk-gap-1" style={{ padding: "4px 8px 8px" }}>
           {stage.items.filter(item => item.kind !== "checkpoint").map(item => (
             <div key={item.id} className="sk-check-row" onClick={() => onOpenItem(item)}>
-              <div style={{ paddingTop: 2 }}><Checkbox checked={!!item.done} disabled /></div>
+              <div style={{ paddingTop: 2 }}>{library ? <IconBookOpen size={16} color="var(--sk-icon-secondary)" /> : <Checkbox checked={!!item.done} disabled />}</div>
               <div className="sk-col" style={{ flex: 1, gap: item.done ? 0 : 2 }}>
                 <div className="sk-label-3-regular" style={{ textDecoration: item.done ? "line-through" : "none", color: item.done ? "var(--sk-text-secondary)" : "var(--sk-text-primary)" }}>{item.title}</div>
                 {!item.done && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>{ELEMENT_LABEL[item.kind]}{item.date ? " · " + item.date : ""}</div>}
