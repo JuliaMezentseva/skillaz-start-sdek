@@ -1959,7 +1959,7 @@ function SubgoalDrawer({ plan, goal, subgoal, onClose, onChange, onOpenChecklist
               const Icon = ELEMENT_ICON[item.kind] || IconFileText;
               return (
                 <div key={item.id} className="sk-row sk-gap-3" style={{ alignItems: "flex-start", padding: 10, background: "var(--sk-surface-page)", border: "1px solid var(--sk-stroke)", borderRadius: "var(--sk-radius-2)" }}>
-                  <div style={{ paddingTop: 2 }}>{library ? <IconBookOpen size={16} color="var(--sk-icon-secondary)" /> : <Checkbox checked={!!item.done} disabled />}</div>
+                  <div style={{ paddingTop: 2 }}><Checkbox checked={!!item.done} disabled /></div>
                   <div className="sk-col sk-gap-1" style={{ flex: 1, minWidth: 0 }}>
                     <div className="sk-label-4" style={{ color: item.done ? "var(--sk-text-secondary)" : "var(--sk-text-primary)" }}>{item.title}</div>
                     <div className="sk-row sk-gap-1" style={{ alignItems: "center" }}>
@@ -2082,7 +2082,7 @@ function ManagerStageBlock({ stage, index, onOpenItem, onAdd }) {
         <div className="sk-col sk-gap-1" style={{ padding: "4px 8px 8px" }}>
           {stage.items.filter(item => item.kind !== "checkpoint").map(item => (
             <div key={item.id} className="sk-check-row" onClick={() => onOpenItem(item)}>
-              <div style={{ paddingTop: 2 }}><Checkbox checked={!!item.done} disabled /></div>
+              <div style={{ paddingTop: 2 }}>{library ? <IconBookOpen size={16} color="var(--sk-icon-secondary)" /> : <Checkbox checked={!!item.done} disabled />}</div>
               <div className="sk-col" style={{ flex: 1, gap: item.done ? 0 : 2 }}>
                 <div className="sk-label-3-regular" style={{ textDecoration: item.done ? "line-through" : "none", color: item.done ? "var(--sk-text-secondary)" : "var(--sk-text-primary)" }}>{item.title}</div>
                 {!item.done && <div className="sk-muted" style={{ font: "var(--sk-label-4-regular)" }}>{ELEMENT_LABEL[item.kind]}{item.date ? " · " + item.date : ""}</div>}
